@@ -30,7 +30,7 @@ const CryptoUpdate = ({image,name,symbol,price, volume, priceChange, marketCap})
                 <td className="pr-10">${price}</td>
                 <td className="pr-10">${volume}</td>
                 {priceChange<0 ? (<td className='text-red-500'>{priceChange.toFixed(2)}%</td>): (<td className='text-green-500'>{priceChange.toFixed(2)}%</td>)}
-                <td className="pr-10">${marketCap.tolocaleString()}</td>
+                <td className="pr-10">${marketCap.toLocaleString()}</td>
               </tr>
             </tbody>
           </table>
