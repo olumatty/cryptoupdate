@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 
 
-const CryptoUpdate = ({name,symbol,price, volume, priceChange, marketCap}) => {
+const CryptoUpdate = ({image,name,symbol,price, volume, priceChange, marketCap}) => {
   return (
     <div className="flex justify-start">
       <div className="flex flex-row border border-[#f97316] border-b items-center w-auto md:w-auto m-3">
