@@ -8,7 +8,7 @@ const CryptoSearch = () => {
   const [result, setResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const Api_Key = "77cce18d948708844c4dfb0b5a1218a0";
+  const access_key = "77cce18d948708844c4dfb0b5a1218a0";
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -20,13 +20,21 @@ const CryptoSearch = () => {
     setError(null);
     try {
       const response = await fetch(
-        `https://api.example.com/crypto?name=${cryptoSearch}&apikey=${Api_Key}`
+        `https://api.coinlayer.com/live?symbols=${cryptoSearch.toUpperCase()}&access_key=${access_key}`
       );
-
       if (!response.ok) throw new Error("Error occurred while fetching data");
-
       const data = await response.json();
-      setResult([data]);
+      if (data.success && data.rates[cryptoSearch.toUpperCase()]) {
+        setResult([
+          {
+            name: cryptoSearch.toUpperCase(),
+            price: data.rates[cryptoSearch.toUpperCase()],
+            symbol: cryptoSearch.toUpperCase(),
+          },
+        ]);
+      } else {
+        setError("No data found for this cryptocurrency");
+      }
     } catch (error) {
       setError(error.message);
     } finally {
@@ -39,13 +47,20 @@ const CryptoSearch = () => {
     setError(null);
     try {
       const response = await fetch(
-        `https://api.example.com/cryptos?limit=8&apikey=${Api_Key}`
+        `https://api.coinlayer.com/live?access_key=${access_key}`
       );
-
       if (!response.ok) throw new Error("Error occurred while fetching data");
-
       const data = await response.json();
-      setResult(data);
+      if (data.success) {
+        const fetchedData = Object.keys(data.rates).map((symbol) => ({
+          name: symbol,
+          price: data.rates[symbol],
+          symbol: symbol,
+        }));
+        setResult(fetchedData);
+      } else {
+        setError("No data found for these cryptocurrencies");
+      }
     } catch (error) {
       setError(error.message);
     } finally {
@@ -55,7 +70,8 @@ const CryptoSearch = () => {
 
   useEffect(() => {
     fetchDefault();
-  }, [Api_Key]);
+  }, [access_key]);
+
   return (
     <div className="mt-20 flex flex-col items-center">
       <div className="mb-12 flex flex-col flex-wrap items-center justify-center ">
@@ -86,15 +102,13 @@ const CryptoSearch = () => {
           <p className="text-red-500">{error}</p>
         ) : result.length > 0 ? (
           <div>
-            {result.map((crypto, index) => (
+            {result.slice(0,10).map((crypto, index) => (
               <CryptoUpdate
                 key={index}
-                image={crypto.image}
                 name={crypto.name}
                 symbol={crypto.symbol}
                 price={crypto.price}
-                volume={crypto.volume}
-                marketCap={crypto.marketCap}
+            
               />
             ))}
           </div>
