@@ -30,6 +30,9 @@ const CryptoSearch = () => {
             name: cryptoSearch.toUpperCase(),
             price: data.rates[cryptoSearch.toUpperCase()],
             symbol: cryptoSearch.toUpperCase(),
+            high: data.high?.[cryptoSearch.toUpperCase()],
+            low: data.low?.[cryptoSearch.toUpperCase()],
+            cap: data.cap?.[cryptoSearch.toUpperCase()],
           },
         ]);
       } else {
@@ -56,6 +59,9 @@ const CryptoSearch = () => {
           name: symbol,
           price: data.rates[symbol],
           symbol: symbol,
+          high: data.high?.[symbol],
+          low: data.low?.[symbol],
+          cap: data.cap?.[symbol],
         }));
         setResult(fetchedData);
       } else {
@@ -73,11 +79,9 @@ const CryptoSearch = () => {
   }, [access_key]);
 
   return (
-    <div className="mt-20 flex flex-col items-center">
+    <div className="mt-12 flex flex-col items-center">
       <div className="mb-12 flex flex-col flex-wrap items-center justify-center ">
-        <h1 className="text-4xl md:text-6xl font-bold text-orange-500">
-          CRYPTO UPDATE
-        </h1>
+        
         <form onSubmit={handleSearch}>
           <div className="relative flex">
             <div className="absolute right-10 top-7">
@@ -106,8 +110,10 @@ const CryptoSearch = () => {
               <CryptoUpdate
                 key={index}
                 name={crypto.name}
-                symbol={crypto.symbol}
                 price={crypto.price}
+                low ={crypto.low}
+                high={crypto.high}
+                cap={crypto.cap}
             
               />
             ))}
